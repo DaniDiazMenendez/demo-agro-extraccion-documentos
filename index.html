@@ -199,7 +199,7 @@
     .doc-card-btn:hover, .doc-card-btn.active { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
     .doc-card-btn strong { font-size: 15px; }
     .doc-card-btn span { color: var(--cp-text-muted); font-size: 12px; line-height: 1.35; }
-    .upload-box {
+    .demo-step-box {
       display: grid;
       place-items: center;
       min-height: 120px;
@@ -316,11 +316,11 @@
                   <span>Acuerdo de compra de granos con precio y condiciones.</span>
                 </button>
               </div>
-              <div class="upload-box">
+              <div class="demo-step-box">
                 <div>
-                  <strong>2. Subir documento</strong>
-                  <p>PDF, foto o escaneo. Aquí usamos un documento de ejemplo para la demo.</p>
-                  <button class="btn primary" id="processBtn">Procesar con Document Intelligence</button>
+                  <strong>2. Ejecutar extracción del ejemplo</strong>
+                  <p>La demo usa documentos de ejemplo embebidos. No almacena ni procesa archivos reales.</p>
+                  <button class="btn primary" id="processBtn">Extraer datos del ejemplo</button>
                 </div>
               </div>
             </div>
@@ -369,7 +369,7 @@
             <ol>
               <li>Mostrar el problema: remitos y contratos se cargan manualmente.</li>
               <li>Seleccionar remito o contrato de ejemplo.</li>
-              <li>Procesar el documento con Azure AI Document Intelligence.</li>
+              <li>Ejecutar la extracción sobre el documento de ejemplo.</li>
               <li>Mostrar campos detectados y nivel de confianza.</li>
               <li>Mostrar tabla final lista para Excel, ERP, Fabric o Power BI.</li>
               <li>Cerrar con el mensaje: menos errores y mayor trazabilidad.</li>
