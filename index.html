@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGRO-03 | Extraccion de documentos agro</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='50' font-size='48'%3E%F0%9F%93%84%3C/text%3E%3C/svg%3E">
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("scoutTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+    :root {
+      --cp-bg: #f4f7ed;
+      --cp-bg-elevated: #fbfbf1;
+      --cp-surface-soft: #eef5df;
+      --cp-border: #d6e2bd;
+      --cp-border-strong: #7a9b45;
+      --cp-accent: #4f7d28;
+      --cp-accent-hover: #3d621f;
+      --cp-accent-soft: rgba(79, 125, 40, 0.13);
+      --cp-success: #4d7c0f;
+      --cp-link: #3d621f;
+      --cp-highlight: rgba(217, 164, 65, 0.16);
+    }
+    html[data-theme="dark"] {
+      --cp-bg: #182315;
+      --cp-bg-elevated: #132010;
+      --cp-surface: #1c2718;
+      --cp-surface-soft: #23331d;
+      --cp-border: #405b32;
+      --cp-border-strong: #a3c66d;
+      --cp-accent: #a3e635;
+      --cp-accent-hover: #bef264;
+      --cp-accent-soft: rgba(163, 230, 53, 0.15);
+      --cp-accent-fg: #10180c;
+      --cp-success: #bef264;
+      --cp-link: #bef264;
+      --cp-highlight: rgba(217, 164, 65, 0.14);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+      background:
+        radial-gradient(circle at 8% 8%, var(--cp-accent-soft), transparent 34rem),
+        radial-gradient(circle at 90% 10%, var(--cp-highlight), transparent 30rem),
+        var(--cp-bg);
+      color: var(--cp-text);
+    }
+    button, select { font: inherit; }
+    a { color: var(--cp-link); }
+    .app { min-height: 100vh; padding: 24px; }
+    .shell { max-width: 1460px; margin: 0 auto; }
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+      gap: 24px;
+      padding: 30px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--cp-panel-strong), var(--cp-accent-soft)), var(--cp-panel-strong);
+      box-shadow: var(--cp-shadow);
+    }
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 6px 10px;
+      border: 1px solid var(--cp-border);
+      border-radius: 999px;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    h1 {
+      max-width: 840px;
+      margin: 16px 0 12px;
+      font-size: clamp(34px, 5vw, 68px);
+      line-height: 0.94;
+      letter-spacing: -0.06em;
+    }
+    .lead {
+      max-width: 820px;
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+    .btn {
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      padding: 11px 14px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 160ms ease, border-color 160ms ease;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: var(--cp-border-strong); }
+    .btn.primary { border-color: var(--cp-accent); background: var(--cp-accent); color: var(--cp-accent-fg); font-weight: 800; }
+    .card, .hero-card {
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    .hero-card { display: grid; gap: 14px; padding: 18px; }
+    .metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .metric { padding: 14px; border: 1px solid var(--cp-border); border-radius: 0.625rem; background: var(--cp-surface-soft); }
+    .metric strong { display: block; font-size: 30px; letter-spacing: -0.05em; }
+    .metric span { color: var(--cp-text-muted); font-size: 13px; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; padding: 8px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-panel); }
+    .tab { flex: 1 1 180px; border: 1px solid transparent; border-radius: 0.625rem; padding: 10px 12px; background: transparent; color: var(--cp-text-muted); cursor: pointer; font-weight: 800; }
+    .tab.active { border-color: var(--cp-border); background: var(--cp-surface); color: var(--cp-text); box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border); }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(300px, 390px) minmax(0, 1fr) minmax(320px, 420px);
+      gap: 18px;
+      align-items: start;
+    }
+    .card-header { padding: 16px 16px 0; }
+    .card-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 6px; font-size: 18px; letter-spacing: -0.02em; }
+    .card-subtitle { margin: 0; color: var(--cp-text-muted); font-size: 13px; line-height: 1.45; }
+    .card-body { padding: 16px; }
+    .doc-selector { display: grid; gap: 10px; }
+    .doc-card-btn {
+      display: grid;
+      gap: 6px;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text);
+      text-align: left;
+      cursor: pointer;
+    }
+    .doc-card-btn:hover, .doc-card-btn.active { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+    .doc-card-btn strong { font-size: 15px; }
+    .doc-card-btn span { color: var(--cp-text-muted); font-size: 12px; line-height: 1.35; }
+    .upload-box {
+      display: grid;
+      place-items: center;
+      min-height: 120px;
+      margin-top: 12px;
+      border: 2px dashed var(--cp-border-strong);
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--cp-accent-soft), var(--cp-surface)), var(--cp-surface);
+      color: var(--cp-text-muted);
+      text-align: center;
+      padding: 16px;
+    }
+    .document-preview {
+      min-height: 700px;
+      padding: 24px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-bg-elevated);
+      box-shadow: inset 0 0 0 8px var(--cp-surface);
+    }
+    .paper {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px;
+      border: 1px solid var(--cp-border);
+      border-radius: 12px;
+      background: var(--cp-surface);
+      box-shadow: var(--cp-shadow);
+    }
+    .paper-header { display: flex; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--cp-border); padding-bottom: 14px; margin-bottom: 16px; }
+    .paper h2 { margin: 0 0 8px; letter-spacing: -0.03em; }
+    .paper p, .paper li { color: var(--cp-text-muted); line-height: 1.45; }
+    .stamp { display: inline-flex; padding: 6px 10px; border: 1px solid var(--cp-accent); border-radius: 999px; background: var(--cp-accent-soft); font-size: 12px; font-weight: 800; }
+    .extraction-panel { display: grid; gap: 14px; }
+    .status-line { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 9px; border: 1px solid var(--cp-border); border-radius: 999px; background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: 12px; font-weight: 800; }
+    .pill.good { color: var(--cp-success); }
+    .answer-box {
+      padding: 16px;
+      border: 2px solid var(--cp-accent);
+      border-radius: 16px;
+      background: linear-gradient(180deg, var(--cp-accent-soft), transparent 42%), var(--cp-bg-elevated);
+      box-shadow: 0 0 0 4px var(--cp-accent-soft);
+    }
+    .answer-box h3 { margin: 0 0 8px; font-size: 22px; letter-spacing: -0.03em; }
+    .answer-box p { margin: 0; color: var(--cp-text-muted); line-height: 1.5; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 8px; border: 1px solid var(--cp-border); text-align: left; vertical-align: top; }
+    th { background: var(--cp-surface-soft); }
+    .table-wrap { overflow: auto; border: 1px solid var(--cp-border); border-radius: 16px; }
+    .field-list { display: grid; gap: 8px; }
+    .field-item { display: flex; justify-content: space-between; gap: 12px; padding: 10px; border: 1px solid var(--cp-border); border-radius: 0.625rem; background: var(--cp-surface-soft); }
+    .field-item span { color: var(--cp-text-muted); }
+    .doc-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .info-card { padding: 16px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border); }
+    .info-card h3 { margin: 0 0 8px; }
+    .info-card p, .info-card li { color: var(--cp-text-muted); line-height: 1.5; }
+    .info-card ul, .info-card ol { padding-left: 18px; }
+    .toast { position: fixed; right: 24px; bottom: 24px; max-width: 360px; padding: 14px 16px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-panel-strong); color: var(--cp-text); box-shadow: var(--cp-shadow); opacity: 0; transform: translateY(18px); pointer-events: none; transition: opacity 180ms ease, transform 180ms ease; z-index: 20; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    @media (max-width: 1180px) { .hero, .workspace, .doc-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) { .app { padding: 12px; } .hero { padding: 18px; } .metric-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <main class="shell">
+      <section class="hero">
+        <div>
+          <span class="eyebrow">AGRO-03 · Azure AI Document Intelligence</span>
+          <h1>Extracción automática de remitos y contratos agro</h1>
+          <p class="lead">
+            Demo visual para mostrar cómo Azure AI Document Intelligence lee documentos comerciales del agro,
+            extrae fecha, proveedor, cantidades, montos y condiciones, y los convierte en una tabla revisable.
+          </p>
+          <div class="hero-actions">
+            <button class="btn primary" data-tab-target="demo">Ver extracción</button>
+            <button class="btn" data-tab-target="guion">Ver guion</button>
+          </div>
+        </div>
+        <aside class="hero-card">
+          <div>
+            <h2 class="card-title">Mensaje para cliente</h2>
+            <p class="card-subtitle">Menos carga manual, menos errores de tipeo y datos listos para trazabilidad, ERP o reportes.</p>
+          </div>
+          <div class="metric-grid">
+            <div class="metric"><strong id="fieldCount">9</strong><span>campos extraídos</span></div>
+            <div class="metric"><strong id="lineCount">3</strong><span>líneas detectadas</span></div>
+            <div class="metric"><strong id="confidenceAvg">94%</strong><span>confianza promedio</span></div>
+            <div class="metric"><strong>-70%</strong><span>tiempo de carga</span></div>
+          </div>
+        </aside>
+      </section>
+
+      <nav class="tabs" aria-label="Vistas">
+        <button class="tab active" data-tab="demo">Demo de extracción</button>
+        <button class="tab" data-tab="guion">Guion y campos</button>
+      </nav>
+
+      <section class="panel active" id="demo">
+        <div class="workspace">
+          <aside class="card">
+            <div class="card-header">
+              <h2 class="card-title">1. Elegí documento</h2>
+              <p class="card-subtitle">Usá un remito o contrato de ejemplo. La demo no usa datos reales.</p>
+            </div>
+            <div class="card-body">
+              <div class="doc-selector">
+                <button class="doc-card-btn active" type="button" data-doc="remito">
+                  <strong>📄 Remito de entrega</strong>
+                  <span>Insumos agrícolas entregados a un establecimiento.</span>
+                </button>
+                <button class="doc-card-btn" type="button" data-doc="contrato">
+                  <strong>📑 Contrato de compra</strong>
+                  <span>Acuerdo de compra de granos con precio y condiciones.</span>
+                </button>
+              </div>
+              <div class="upload-box">
+                <div>
+                  <strong>2. Subir documento</strong>
+                  <p>PDF, foto o escaneo. Aquí usamos un documento de ejemplo para la demo.</p>
+                  <button class="btn primary" id="processBtn">Procesar con Document Intelligence</button>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <section class="document-preview">
+            <div class="paper" id="documentPreview"></div>
+          </section>
+
+          <aside class="card">
+            <div class="card-header">
+              <h2 class="card-title">3. Datos extraídos</h2>
+              <p class="card-subtitle">Campos clave detectados, confianza y tabla lista para revisar.</p>
+            </div>
+            <div class="card-body extraction-panel">
+              <div class="status-line" id="statusLine"></div>
+              <div class="answer-box" id="summaryBox"></div>
+              <div>
+                <h3 class="card-title">Campos clave</h3>
+                <div class="field-list" id="fieldList"></div>
+              </div>
+            </div>
+          </aside>
+
+          <article class="card wide">
+            <div class="card-header">
+              <h2 class="card-title">Tabla estructurada para negocio</h2>
+              <p class="card-subtitle">Salida final para ERP, Excel, Fabric o Power BI.</p>
+            </div>
+            <div class="card-body">
+              <div class="table-wrap">
+                <table>
+                  <thead id="tableHead"></thead>
+                  <tbody id="tableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="guion">
+        <div class="doc-grid">
+          <article class="info-card">
+            <h3>Guion de demo</h3>
+            <ol>
+              <li>Mostrar el problema: remitos y contratos se cargan manualmente.</li>
+              <li>Seleccionar remito o contrato de ejemplo.</li>
+              <li>Procesar el documento con Azure AI Document Intelligence.</li>
+              <li>Mostrar campos detectados y nivel de confianza.</li>
+              <li>Mostrar tabla final lista para Excel, ERP, Fabric o Power BI.</li>
+              <li>Cerrar con el mensaje: menos errores y mayor trazabilidad.</li>
+            </ol>
+          </article>
+          <article class="info-card">
+            <h3>Campos clave a extraer</h3>
+            <ul>
+              <li>Tipo de documento, número, fecha y proveedor.</li>
+              <li>Cliente / establecimiento / destino.</li>
+              <li>Producto, cantidad, unidad, precio y monto.</li>
+              <li>Condiciones comerciales, vencimiento y observaciones.</li>
+              <li>Confianza de extracción para revisión humana.</li>
+            </ul>
+          </article>
+          <article class="info-card">
+            <h3>Documentación oficial</h3>
+            <ul>
+              <li><a href="https://learn.microsoft.com/azure/ai-services/document-intelligence/" target="_blank" rel="noreferrer">Azure AI Document Intelligence</a></li>
+              <li><a href="https://learn.microsoft.com/azure/ai-services/document-intelligence/concept-custom-model" target="_blank" rel="noreferrer">Custom document models</a></li>
+              <li><a href="https://learn.microsoft.com/azure/ai-services/document-intelligence/concept-layout" target="_blank" rel="noreferrer">Layout extraction</a></li>
+            </ul>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const DOCS = {
+      remito: {
+        name: "Remito de entrega",
+        icon: "📄",
+        summary: "Remito R-000184 detectado. Se extrajeron proveedor, destino, fecha, productos, cantidades y monto estimado.",
+        fields: [
+          ["Tipo", "Remito", "99%"],
+          ["Número", "R-000184", "98%"],
+          ["Fecha", "2026-08-18", "97%"],
+          ["Proveedor", "AgroServicios Norte S.A.", "95%"],
+          ["Destino", "Establecimiento La Esperanza · Lote A12", "93%"],
+          ["Transportista", "TransCampo SRL", "91%"],
+          ["Monto total", "USD 18.940", "92%"],
+          ["Estado", "Pendiente de conciliación", "89%"],
+          ["Observación", "Entrega parcial de fertilizante", "86%"]
+        ],
+        lines: [
+          { producto: "Semilla maíz híbrido AX-720", cantidad: 42, unidad: "bolsas", precio: 185, monto: 7770 },
+          { producto: "Fertilizante MAP 11-52", cantidad: 12, unidad: "tn", precio: 680, monto: 8160 },
+          { producto: "Curasemilla premium", cantidad: 30, unidad: "lts", precio: 100.33, monto: 3010 }
+        ],
+        html: `
+          <div class="paper-header">
+            <div><h2>Remito R-000184</h2><span class="stamp">Entrega de insumos</span></div>
+            <div><strong>Fecha</strong><p>18/08/2026</p></div>
+          </div>
+          <p><strong>Proveedor:</strong> AgroServicios Norte S.A.</p>
+          <p><strong>Destino:</strong> Establecimiento La Esperanza · Lote A12</p>
+          <p><strong>Transportista:</strong> TransCampo SRL</p>
+          <h3>Detalle</h3>
+          <ul>
+            <li>42 bolsas · Semilla maíz híbrido AX-720 · USD 185 c/u</li>
+            <li>12 tn · Fertilizante MAP 11-52 · USD 680/tn</li>
+            <li>30 lts · Curasemilla premium · USD 100,33/lt</li>
+          </ul>
+          <p><strong>Observación:</strong> entrega parcial de fertilizante. Validar contra orden de compra.</p>
+        `
+      },
+      contrato: {
+        name: "Contrato de compra",
+        icon: "📑",
+        summary: "Contrato C-2026-017 detectado. Se extrajeron comprador, vendedor, producto, toneladas, precio, entrega y condiciones.",
+        fields: [
+          ["Tipo", "Contrato de compra", "99%"],
+          ["Número", "C-2026-017", "98%"],
+          ["Fecha", "2026-08-12", "96%"],
+          ["Vendedor", "Productora Campo Claro S.A.", "94%"],
+          ["Comprador", "Molinos del Centro S.A.", "94%"],
+          ["Producto", "Trigo pan", "97%"],
+          ["Cantidad", "480 tn", "96%"],
+          ["Precio", "USD 238 / tn", "93%"],
+          ["Entrega", "Puerto Rosario · Sep 2026", "91%"]
+        ],
+        lines: [
+          { producto: "Trigo pan calidad comercial", cantidad: 480, unidad: "tn", precio: 238, monto: 114240 },
+          { producto: "Bonificación proteína >11%", cantidad: 480, unidad: "tn", precio: 8, monto: 3840 },
+          { producto: "Descuento humedad fuera de base", cantidad: 480, unidad: "tn", precio: -3, monto: -1440 }
+        ],
+        html: `
+          <div class="paper-header">
+            <div><h2>Contrato C-2026-017</h2><span class="stamp">Compra de granos</span></div>
+            <div><strong>Fecha</strong><p>12/08/2026</p></div>
+          </div>
+          <p><strong>Vendedor:</strong> Productora Campo Claro S.A.</p>
+          <p><strong>Comprador:</strong> Molinos del Centro S.A.</p>
+          <p><strong>Producto:</strong> Trigo pan calidad comercial</p>
+          <h3>Condiciones</h3>
+          <ul>
+            <li>Cantidad: 480 toneladas</li>
+            <li>Precio base: USD 238 / tn</li>
+            <li>Entrega: Puerto Rosario · Septiembre 2026</li>
+            <li>Bonificación por proteína mayor a 11%</li>
+          </ul>
+          <p><strong>Condición de pago:</strong> transferencia a 7 días de certificado de descarga.</p>
+        `
+      }
+    };
+
+    const tabs = document.querySelectorAll(".tab");
+    const panels = document.querySelectorAll(".panel");
+    const toast = document.getElementById("toast");
+    let activeDoc = "remito";
+
+    function setTab(tabId) {
+      tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === tabId));
+      panels.forEach((panel) => panel.classList.toggle("active", panel.id === tabId));
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function money(value) {
+      return `USD ${Math.round(value).toLocaleString("es-AR")}`;
+    }
+
+    function render() {
+      const doc = DOCS[activeDoc];
+      document.querySelectorAll(".doc-card-btn").forEach((button) => {
+        button.classList.toggle("active", button.dataset.doc === activeDoc);
+      });
+      document.getElementById("documentPreview").innerHTML = doc.html;
+      document.getElementById("statusLine").innerHTML = `
+        <span class="pill good">Documento procesado</span>
+        <span class="pill">Modelo: prebuilt-document + campos personalizados</span>
+        <span class="pill good">Confianza promedio ${averageConfidence(doc.fields)}%</span>
+      `;
+      document.getElementById("summaryBox").innerHTML = `<h3>${doc.icon} ${doc.name}</h3><p>${doc.summary}</p>`;
+      document.getElementById("fieldList").innerHTML = doc.fields.map(([name, value, confidence]) => `
+        <div class="field-item"><span>${name}</span><strong>${value}</strong><span>${confidence}</span></div>
+      `).join("");
+      document.getElementById("tableHead").innerHTML = "<tr><th>Producto / concepto</th><th>Cantidad</th><th>Unidad</th><th>Precio</th><th>Monto</th></tr>";
+      document.getElementById("tableBody").innerHTML = doc.lines.map((line) => `
+        <tr><td>${line.producto}</td><td>${line.cantidad}</td><td>${line.unidad}</td><td>${money(line.precio)}</td><td>${money(line.monto)}</td></tr>
+      `).join("");
+      document.getElementById("fieldCount").textContent = String(doc.fields.length);
+      document.getElementById("lineCount").textContent = String(doc.lines.length);
+      document.getElementById("confidenceAvg").textContent = `${averageConfidence(doc.fields)}%`;
+    }
+
+    function averageConfidence(fields) {
+      const values = fields.map((field) => Number(field[2].replace("%", "")));
+      return Math.round(values.reduce((sum, item) => sum + item, 0) / values.length);
+    }
+
+    tabs.forEach((tab) => tab.addEventListener("click", () => setTab(tab.dataset.tab)));
+    document.querySelectorAll("[data-tab-target]").forEach((button) => button.addEventListener("click", () => setTab(button.dataset.tabTarget)));
+    document.querySelectorAll(".doc-card-btn").forEach((button) => {
+      button.addEventListener("click", () => {
+        activeDoc = button.dataset.doc;
+        render();
+      });
+    });
+    document.getElementById("processBtn").addEventListener("click", () => {
+      render();
+      toast.textContent = "Documento procesado y campos extraídos.";
+      toast.classList.add("show");
+      window.setTimeout(() => toast.classList.remove("show"), 2600);
+    });
+    render();
+  </script>
+</body>
+</html>
